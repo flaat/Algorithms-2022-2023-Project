@@ -74,18 +74,21 @@ def get_max_value(data, crypto: str, period: Tuple[int,int]) -> Tuple[int, float
     return (None, None)
 
 
-def search(data, value) -> Tuple[int, float]:
+def search(data, value: float, crypto: str) -> Tuple[int, float]:
     """
-    This function takes as input the data series and the value to search and returns a 
-    tuple containing the day and the value for a given crypto.
-    If the value is not in data, then the function must return the closest value, this means that
-    you have to return the value closer to param value, namely:
-    if you have  d1 = |value - data[i]|, d2 = |value - data[j]| you have to choose the 
-    argmin(d1, d2) (the element in position i if d1 < d2 the element in position d2 otherwise)
-    :data: A data structure containing the values for price or volume of a given crypto
-    :value: A value to search in data
-    @return: A tuple containing the day in which the cripto reached the minimum value,
-             along with the minimum value for that crypto
+    This function searches for a specific value in a given data series and
+    returns a tuple with the day and the value for a given cryptocurrency.
+    If the searched value is not present in the data, the function returns the
+    closest value. It compares two values of the data series, one at position i
+    and the other at position j, and returns the value closest to the searched value.
+    
+    Parameters:
+    :data: A data structure that contains the values of price and volume of all cryptos.
+    :value: The value to be searched in the data.
+    :crypto: The crypto name to search the value for.
+    
+    @return: A tuple containing the day on which the cryptocurrency reached the closest value
+             and the closest value.
     """
 
     # TODO: Implement here your solution
