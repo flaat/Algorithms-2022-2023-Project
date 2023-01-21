@@ -38,16 +38,18 @@ def crypto_stats(crypto_name: str, interval: Tuple[int, int]) -> Tuple[float, fl
     return None
 
 
-def sort_data(data) -> list[str]:
+def sort_data(data) -> list[Tuple[str, float]]:
     """
-    This function must implement a sorting algorithm among the one you studied during
-    the course. It is forbidden to use any kind of libraries such as Pandas, or functions like
+    This function sorts the cryptocurrencies first in alphabetical order, and,
+    then, for each of them, it performs a sort according to the day of monitoring.
+    
+    It is forbidden to use any kind of libraries such as Pandas, or functions like
     list.sort()!
     
     Parameters:
     :data: A data structure containing all the information about the cryptos
     
-    @return: A list of string containing all the dataset entries sorted by name, and by day
+    @return: A sorted list of tuples containing (crypto name, price)
     """
 
     # TODO: Implement here your solution
@@ -55,16 +57,16 @@ def sort_data(data) -> list[str]:
     return None
 
 
-def get_minimum_value(data) -> Tuple[int, float]:
+def get_max_value(data, crypto: str, period: Tuple[int,int]) -> Tuple[int, float]:
     """
-    This function must return the minimum value for a given crypto.
+    This function must return the maximum value for a given crypto.
     
     Parameters:
     
     :data: A data structure containing the values for price or volume of a given crypto
     
-    @return: A tuple containing the day in which the cripto reached the minimum value,
-             along with the minimum value for that crypto
+    @return: A tuple containing the day in which the crypto reached the maximum value,
+             along with the maximum value for that crypto
     """
 
     # TODO: Implement here your solution
