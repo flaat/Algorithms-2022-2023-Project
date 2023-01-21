@@ -57,13 +57,19 @@ def sort_data(data) -> list[Tuple[str, float]]:
     return None
 
 
-def get_max_value(data, crypto: str, period: Tuple[int,int]) -> Tuple[int, float]:
+def get_max_value(data, crypto: str, month: int) -> Tuple[int, float]:
     """
-    This function must return the maximum value for a given crypto.
+    This function must return the maximum value for a given crypto in
+    a specific month.
     
     Parameters:
     
-    :data: A data structure containing the values for price or volume of a given crypto
+    :data: A data structure containing the values for price or volume
+           of a given crypto.
+    :crypto: The crypto for which to search the maximum value.
+    :month: The month in which to search for the maximum value.
+    
+    Assumption: each month contains 30 days.
     
     @return: A tuple containing the day in which the crypto reached the maximum value,
              along with the maximum value for that crypto
