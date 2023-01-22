@@ -2,10 +2,10 @@
 # Please fill the empty parts with your solution
 
 import src.solutions.sorted_datasets as sol_datasets
-from typing import Tuple
+from typing import Tuple, List, Dict
 
 
-def read_file(file_path: str):
+def read_file(file_path: str) -> any:
     """
     This function reads the dataset containg all the information about the 
     cryptocurrecies. The information are stored in a .txt file.
@@ -13,7 +13,7 @@ def read_file(file_path: str):
     Parameters:
     :file_path: The current path where the file you want to read is located
     
-    @return: A data structure contining the information
+    @return: A data structure contining the information of the crypto
     """
 
     # TODO: Implement here your solution
@@ -38,7 +38,7 @@ def crypto_stats(crypto_name: str, interval: Tuple[int, int]) -> Tuple[float, fl
     return None
 
 
-def sort_data(data) -> list[Tuple[str, float]]:
+def sort_data(data) -> List[Tuple[str, float]]:
     """
     This function sorts the cryptocurrencies first in alphabetical order, and,
     then, for each of them, it performs a sort according to the day of monitoring.
@@ -101,3 +101,50 @@ def search(data, value: float, crypto: str) -> Tuple[int, float]:
 
 
     return (None, None)
+
+
+def min_correlation_pathways(data,
+                             crypto: str,
+                             interval: Tuple[int,int]) -> Dict[str: List[str]]:
+    """
+    This function builds a minimal correlation pathways tree on the given
+    data structure for a specific cryptocurrency in a designated temporal
+    period. For each node x, the sum of the weights in the path from the root
+    to x must be minimal.
+    
+    Parameters:
+    :data: A data structure that contains the information of all cryptos.
+    :crypto: The crypto name for which to build the tree.
+    :interval: The temporal period for which to build the tree.
+               It's in the form [x,y] where x is the beginning time and y is the end
+               time.
+               
+    @return: The minimal correlation pathways tree
+    """
+    # TODO: Implement here your solution
+    
+    return None
+
+
+def correlated_cryptos_at_lvl_k(data,
+                                crypto: str,
+                                level: int,
+                                interval: Tuple[int,int]) -> List[str]:
+    """
+    This function retrieves the cryptocurrencies related to the one given in input
+    at a particular level of correlation in a designated temporal period [x,y].
+    
+    Parameters:
+    :data: A data structure that contains the information of all cryptos.
+    :crypto: The crypto name to search correlations for.
+    :level: The level at which the correlated cryptos should stand at.
+    :interval: The temporal period for which to build the correlation tree.
+               It's in the form [x,y] where x is the beginning time and y is the end
+               time.
+               
+    @return: A list of cryptocurrencies
+    """
+    # TODO: Implement here your solution
+
+    
+    return None
