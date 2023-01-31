@@ -1,9 +1,9 @@
 # Luiss - Management and Computer Science - Algorithm 2022/2023 
 # Please fill the empty parts with your solution
 
-import src.solutions.sorted_datasets as sol_datasets
+import src.solution_evaluation.sorted_datasets as sol_datasets
 from typing import Tuple, List, Dict
-
+import pandas as pd
 
 def read_file(file_path: str) -> any:
     """
@@ -18,7 +18,9 @@ def read_file(file_path: str) -> any:
 
     # TODO: Implement here your solution
 
-    return None
+    df = pd.read_csv(file_path, sep=',', header=None)
+    df.columns = ['crypto','day','price','volume']
+    return df
 
 def crypto_stats(crypto_name: str, interval: Tuple[int, int]) -> Tuple[float, float, float]:
     """
@@ -53,8 +55,10 @@ def sort_data(data) -> List[Tuple[str, float]]:
     """
 
     # TODO: Implement here your solution
-
-    return None
+    data = data.sort_values(by=['crypto','day'])
+    data = data[['crypto','price']]
+    data = data.head(1000)
+    return list(map(lambda elem: tuple(elem), data.values))
 
 
 def get_max_value(data, crypto: str, month: int) -> Tuple[int, float]:
@@ -105,7 +109,7 @@ def search(data, value: float, crypto: str) -> Tuple[int, float]:
 
 def min_correlation_pathways(data,
                              crypto: str,
-                             interval: Tuple[int,int]) -> Dict[str: List[str]]:
+                             interval: Tuple[int,int]) -> Dict[str, List[str]]:
     """
     This function builds a minimal correlation pathways tree on the given
     data structure for a specific cryptocurrency in a designated temporal
