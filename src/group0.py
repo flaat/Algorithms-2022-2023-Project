@@ -18,9 +18,7 @@ def read_file(file_path: str) -> any:
 
     # TODO: Implement here your solution
 
-    df = pd.read_csv(file_path, sep=',', header=None)
-    df.columns = ['crypto','day','price','volume']
-    return df
+    return None
 
 def crypto_stats(crypto_name: str, interval: Tuple[int, int]) -> Tuple[float, float, float]:
     """
@@ -55,10 +53,7 @@ def sort_data(data) -> List[Tuple[str, float]]:
     """
 
     # TODO: Implement here your solution
-    data = data.sort_values(by=['crypto','day'])
-    data = data[['crypto','price']]
-    data = data.head(1000)
-    return list(map(lambda elem: tuple(elem), data.values))
+    return None
 
 
 def get_max_value(data, crypto: str, month: int) -> Tuple[int, float]:
