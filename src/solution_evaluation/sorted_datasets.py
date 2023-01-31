@@ -22,7 +22,7 @@ class SortingEvaluator:
         if not self.__check_correct_student_solution_format():
             print('Test #2 failed.\nThe return type of sorted_data must be '\
                 + 'List[Tuple[str, float]]\n'\
-                    + 'example: [("algorithms",0.1),("databases",0.2),("networking",3.4)]')
+                    + 'example: [("algorand",0.1),("bitcoin",0.2),("etherium",3.4)]')
             
             return False
         
@@ -50,20 +50,11 @@ class SortingEvaluator:
         return list(map(lambda elem: tuple(elem), values))
 
 
-    def __check_correct_student_solution_format(self) -> bool:
-        checker: bool = False
-        
-        if self.student_sorted_struct:
-            if type(self.student_sorted_struct) is list:
-                for item in self.student_sorted_struct:
-                    if not type(item) is tuple\
-                        or len(item) != 2\
-                            or not type(item[0]) is str\
-                                or not type(item[1]) is float:
-                            return False
-                checker = True
-                
-        return checker
+    def __check_correct_student_solution_format(self) -> bool:      
+        if not self.student_sorted_struct or type(self.student_sorted_struct) is not list:
+            return False
+        return all(type(item) is tuple and len(item) == 2 and type(item[0]) is str and type(item[1]) is float 
+                for item in self.student_sorted_struct)
 
 
     def __first_divergence(self, a: List[Tuple[str, float]], b: List[Tuple[str, float]]) -> int:
