@@ -3,51 +3,47 @@
 # will be FAILED.
 # If your implementation ends before the maximum allowed time and it returns the correct
 # result the test will be PASSED.
+import os
 import time
+
 import src.group0 as student_solution
-import src.solutions.sorted_datasets as sol_dataset
+import src.solution_evaluation.sorted_datasets as evaluate_sorting
+
 
 def sorting_test():
     """
     This function checks if the sorting function works correctly.
     """
+    def __get_dataset_filepaths(directory):
+        return [f for f in os.listdir(directory) if f.endswith(".txt") and f.startswith("dataset")]
 
+    def __get_dataset_size(filename):
+        return filename[filename.index('_') + 1: filename.index('.')]
+
+    score = 0
     DATA_PATH = "data/"
-
-    solution_datasets = {"small":sol_dataset.DATASET_250, 
-                        "medium":sol_dataset.DATASET_500, 
-                        "large":sol_dataset.DATASET_750, 
-                        "full":sol_dataset.DATASET_FULL}
-
-    for size in ["small", "medium", "large", "full"]:
-
-        failed = False
-
-        data = student_solution.read_file(DATA_PATH+f"dataset_{size}.txt")
-
+    
+    dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
+    
+    for file in dataset_file_paths:
+        data = student_solution.read_file(f'{DATA_PATH}{file}')
+        # start measuring exec time
         tic = time.time()
-
-        sorted_data = student_solution.sort_data(data)
-
+        student_sorted_data = student_solution.sort_data(data)
+        # end measuring exec time
         toc = time.time()
-
-        if sorted_data is None:
-
-            raise Exception("sorted_data is None!")
-
-        for index, element in enumerate(sorted_data):
+        # instantiate the evaluator
+        evaluator = evaluate_sorting.SortingEvaluator(student_sorted_struct=student_sorted_data)
+        # evaluate the test
+        dataset_size = __get_dataset_size(file)
+        if evaluator.eval(dataset_size):
+            score += 1
         
-            if element !=  solution_datasets[size][index]:
+        print(f"Elapsed time: {toc-tic:.6f} seconds for dataset {dataset_size}")        
+        print(f"Score: {score}/{len(dataset_file_paths)}")
 
-                print(f"TEST \033[91m FAILED \033[0m: sorting with the {size} dataset")
-                print(f"    Error: your solution at position {index} have element {element}, it should be instead {solution_datasets[size][index]}")
-                failed = True
-                break
-
-        if not failed:
-            print(f"TEST \033[92m PASSED \033[0m: it took {toc-tic} seconds to sort the {size} dataset.")
-
-
+        
+            
 if __name__ == "__main__":
 
     sorting_test()
