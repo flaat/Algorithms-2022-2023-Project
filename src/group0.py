@@ -23,6 +23,8 @@ def crypto_stats(data, crypto_name: str, interval: Tuple[int, int]) -> Tuple[flo
     in input. Notice that [a,b] can be an interval that might exceed the actual monitoring
     time of the crypto given in input.
     
+    If any error occurs, return the default value (0.0, 0.0, 0.0)
+    
     Parameters:
     :data: The data structure used to calculate the statistics
     :crypto_name: The name of the cryptocurrency to calculate statistics for
