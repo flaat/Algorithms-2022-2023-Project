@@ -1,9 +1,6 @@
 # Luiss - Management and Computer Science - Algorithm 2022/2023 
 # Please fill the empty parts with your solution
-
-import src.solution_evaluation.sorted_datasets as sol_datasets
 from typing import Tuple, List, Dict
-import pandas as pd
 
 def read_file(file_path: str) -> any:
     """
@@ -17,22 +14,22 @@ def read_file(file_path: str) -> any:
     """
 
     # TODO: Implement here your solution
-
     return None
 
-def crypto_stats(crypto_name: str, interval: Tuple[int, int]) -> Tuple[float, float, float]:
+def crypto_stats(data, crypto_name: str, interval: Tuple[int, int]) -> Tuple[float, float, float]:
     """
     This function calculates the minimum, average, and maximum price values of a crypto
     whose name is passed in input within a specific period of time [a,b] passed
-    in input.
+    in input. Notice that [a,b] can be an interval that might exceed the actual monitoring
+    time of the crypto given in input.
     
     Parameters:
+    :data: The data structure used to calculate the statistics
     :crypto_name: The name of the cryptocurrency to calculate statistics for
     :interval: The time interval consisting of a tuple of two values (a,b)
     
     @return: A tuple that contains the minimum, average, and maximum price values
     """
-    
     # TODO: Implement here your solution
     
     return None
@@ -144,6 +141,4 @@ def correlated_cryptos_at_lvl_k(data,
     @return: A list of cryptocurrencies
     """
     # TODO: Implement here your solution
-
-    
     return None

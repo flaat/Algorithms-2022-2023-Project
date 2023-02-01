@@ -1,60 +1,50 @@
-import os
+from os.path import join
 from math import isclose
 from typing import List, Tuple
 
 import pandas as pd
 
-
 class SortingEvaluator:
     
-    def __init__(self, student_sorted_struct=None):
-        self.student_sorted_struct = student_sorted_struct
+    def __init__(self, dataset_size, student_data_struct=None):
+        self.student_data_struct = student_data_struct
+        self.dataset_size = dataset_size
         
-        self.SIZE_TO_SORTED_DATASET_PATH = {
-            'full': os.path.join('solutions', 'sorted_datasets','dataset_full.csv'),
-            'large': os.path.join('solutions', 'sorted_datasets','dataset_large.csv'),
-            'medium': os.path.join('solutions', 'sorted_datasets','dataset_medium.csv'),
-            'small': os.path.join('solutions', 'sorted_datasets','dataset_small.csv')
-        }
+        self.BASE_PATH_TO_SOLUTION = join('solutions','sorted_datasets',
+                                          f'{self.dataset_size}', 'test.csv')
         
         
-    def eval(self, dataset_size: str) -> bool:
+    def eval(self) -> bool:
         if not self.__check_correct_student_solution_format():
-            print('Test #2 failed.\nThe return type of sorted_data must be '\
+            print('Test failed.\nThe return type of sorted_data must be '\
                 + 'List[Tuple[str, float]]\n'\
                     + 'example: [("algorand",0.1),("bitcoin",0.2),("etherium",3.4)]')
             
             return False
+                    
+        correct_solution = self.__read_solution()
         
-        sorted_dataset_path = self.__get_sorted_dataset_path(dataset_size)
-            
-        correct_solution = self.__read_sorted_datasets(sorted_dataset_path)
-        
-        divergence_index = self.__first_divergence(correct_solution, self.student_sorted_struct)
+        divergence_index = self.__first_divergence(correct_solution, self.student_data_struct)
         if divergence_index != -1:
-            print(f'Test #2 failed.\nYou correctly sorted the data up until index={divergence_index}.\n'\
-                + f'{self.student_sorted_struct[divergence_index]} does not come before {correct_solution[divergence_index]}')
+            print(f'Test failed.\nYou correctly sorted the data up until index={divergence_index}.\n'\
+                + f'{self.student_data_struct[divergence_index]} does not come before {correct_solution[divergence_index]}')
             
             return False
         
-        print(f'Test #2 passed on dataset_{dataset_size}.')    
+        print(f'Test passed on dataset_{self.dataset_size}.')    
         return True
     
-    
-    def __get_sorted_dataset_path(self, size: str) -> str:
-        return self.SIZE_TO_SORTED_DATASET_PATH.get(size.lower(), None)
-    
-    def __read_sorted_datasets(self, filepath: str) -> List[Tuple[str, float]]:
-        df = pd.read_csv(filepath, sep=',')
+    def __read_solution(self) -> List[Tuple[str, float]]:
+        df = pd.read_csv(self.BASE_PATH_TO_SOLUTION, sep=',')
         values = df.values
         return list(map(lambda elem: tuple(elem), values))
 
 
     def __check_correct_student_solution_format(self) -> bool:      
-        if not self.student_sorted_struct or type(self.student_sorted_struct) is not list:
+        if not self.student_data_struct or type(self.student_data_struct) is not list:
             return False
         return all(type(item) is tuple and len(item) == 2 and type(item[0]) is str and type(item[1]) is float 
-                for item in self.student_sorted_struct)
+                for item in self.student_data_struct)
 
 
     def __first_divergence(self, a: List[Tuple[str, float]], b: List[Tuple[str, float]]) -> int:
