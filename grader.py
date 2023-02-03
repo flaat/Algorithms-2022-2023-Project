@@ -5,9 +5,11 @@
 # result the test will be PASSED.
 import os
 import time
+from os.path import join
 from typing import Tuple
 
 import numpy as np
+import pandas as pd
 
 import src.group0 as student_solution
 from src.solution_evaluation.crypto_stats import CryptoStatsEvaluator
@@ -31,134 +33,61 @@ def crypto_stats_test():
         return (score, toc-tic)
     
     
-    DATA_PATH = "data/"
+    DATA_PATH, TEST_PATH = "data", "tests"
     
     scores, average_time = [], []
     
     dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
     #############################################################################
     # tests for the small dataset
-    filepath = f'{DATA_PATH}{dataset_file_paths[-1]}'
-    data = student_solution.read_file(filepath)
-    
+    filepath = join(DATA_PATH, dataset_file_paths[-1])
     dataset_size = __get_dataset_size(filepath)
-    # test 1
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=0,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'Algorand',
-                     'interval': (1,5)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 2
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=1,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'Algorand',
-                     'interval': (200,1000)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 3
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=2,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'Elrond',
-                     'interval': (15,18)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 4
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=3,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'tether',
-                     'interval': (20,20)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 5
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=4,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'TrueUSD',
-                     'interval': (1,3)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 6
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=5,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': '1inch',
-                     'interval': (0,149)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 7
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=6,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'Kusama',
-                     'interval': (12,47)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 8
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=7,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': '1inch',
-                     'interval': (12,56)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 9
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=8,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'IOTA',
-                     'interval': (9,18)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
-    # test 10
-    score, seconds = perform_test(dataset_size=dataset_size,
-                 test_num=9,
-                 crypto_stats_args={
-                     'data': data,
-                     'crypto_name': 'bitcoin',
-                     'interval': (1,1000)
-                 })
-    scores.append(score)
-    average_time.append(seconds)
+    
+    data = student_solution.read_file(filepath)
+
+    test_file = join(TEST_PATH, 'crypto_stats', dataset_size, 'test.csv')
+    df = pd.read_csv(test_file)
+    
+    for i, value in enumerate(df.values):
+        score, seconds = perform_test(dataset_size=dataset_size,
+                                      test_num=i,
+                                      crypto_stats_args={
+                                          'data': data,
+                                          'crypto_name': value[0],
+                                          'interval': (value[1], value[-1])
+                                      })
+        scores.append(score)
+        average_time.append(seconds)
     ###############################################################################
-    print(f"Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
+    print(f"crypto_stats ---- Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
     print(f"Score: {sum(scores)}/{len(scores)}")
     ###############################################################################
 
+def reading_data_test():
+    """
+        This functions measures the time of the reading function.
+    """
+    DATA_PATH = "data/"    
+    dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
+    for data_file_path in dataset_file_paths:
+        tic = time.time()
+        _ = student_solution.read_file(join(DATA_PATH, data_file_path))
+        toc = time.time()
+        data_size = __get_dataset_size(data_file_path)
+   
+        print(f'reading_file --- Elapsed time: {toc-tic:6f} seconds for dataset {data_size}')
     
 def sorting_test():
     """
         This function checks if the sorting function works correctly.
     """
     score = 0
-    DATA_PATH = "data/"
+    DATA_PATH = "data"
     
     dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
     
     for file in dataset_file_paths:
-        data = student_solution.read_file(f'{DATA_PATH}{file}')
+        data = student_solution.read_file(join(DATA_PATH, file))
         # start measuring exec time
         tic = time.time()
         retr = student_solution.sort_data(data)
@@ -171,7 +100,7 @@ def sorting_test():
         # evaluate the test
         score += 1 if evaluator.eval() else 0
                 
-        print(f"Elapsed time: {toc-tic:.6f} seconds for dataset {dataset_size}")        
+        print(f"sort_data --- Elapsed time: {toc-tic:.6f} seconds for dataset {dataset_size}")        
         print(f"Score: {score}/{len(dataset_file_paths)}")
 
 def __get_dataset_filepaths(directory):
@@ -181,5 +110,5 @@ def __get_dataset_size(filename):
     return filename[filename.index('_') + 1: filename.index('.')]
             
 if __name__ == "__main__":
-
+    reading_data_test()
     crypto_stats_test()

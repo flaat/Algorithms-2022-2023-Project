@@ -3,7 +3,6 @@ from typing import Tuple
 
 import pandas as pd
 
-
 class CryptoStatsEvaluator:      
     
     def __init__(self, dataset_size, student_data_struct=None):
@@ -12,7 +11,7 @@ class CryptoStatsEvaluator:
         self.test_num = 0       
                 
         self.BASE_PATH_TO_SOLUTION = join('solutions', 'crypto_stats',
-                                           f'{self.dataset_size}', 'test.csv')         
+                                           f'{self.dataset_size}', 'results.csv')         
         
     def eval(self) -> bool:
         if not self.__check_correct_student_solution_format():
@@ -22,7 +21,7 @@ class CryptoStatsEvaluator:
             
             return False
                 
-        correct_solution = self.__read_solution()
+        correct_solution, _ = self.__read_solution()
 
         divergence_index = self.__first_divergence(correct_solution, self.student_data_struct)
         if divergence_index != -1:
@@ -42,7 +41,8 @@ class CryptoStatsEvaluator:
     
     def __read_solution(self):
         df = pd.read_csv(self.BASE_PATH_TO_SOLUTION, sep=',')
-        return tuple(float(x) for x in df.values[self.test_num])
+        temp = df.drop(columns=['crypto_name','beginning','end'])
+        return tuple(float(x) for x in temp.values[self.test_num]), df.iloc[self.test_num][['crypto_name','beginning','end']]
     
     
     def __first_divergence(self, a: Tuple[float, float, float], b: Tuple[float, float, float]) -> int:
