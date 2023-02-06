@@ -3,6 +3,7 @@ Group project work - ALGORITHMS 2022/2023 course, Management and Computer Scienc
 
 <h2>The tools we'll use</h2>
 <ul>
+  <li><a href="https://desktop.github.com/">GitHub Desktop<a> - to help you clone the repository with a UI, instead of installing the git command and going through basic bash instructions (out of scope for Algorithms).</li>
   <li><a href="https://code.visualstudio.com/Download">VSCode</a> - The IDE that we'll use throughout the programming classes. It gives the opportunity to manage git commands from the UI.</li>
   <li>Extension packs for VSCode:
     <ul>
