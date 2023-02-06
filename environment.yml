@@ -1,0 +1,4 @@
+name: cryptos
+channels:
+  - defaults
+prefix: C:\Users\39348\miniconda3\envs\cryptos
