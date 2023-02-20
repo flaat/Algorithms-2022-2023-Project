@@ -48,7 +48,7 @@ class CryptoStatsEvaluator:
     def __first_divergence(self, a: Tuple[float, float, float], b: Tuple[float, float, float]) -> int:
         assert len(a) == len(b), f"The length must be {len(a)}"
         for i in range(len(a)):
-            if a[i] != b[i]:
+            if round(a[i], 4) != round(b[i], 4):
                 return i
         return -1
     
