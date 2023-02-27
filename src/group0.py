@@ -33,8 +33,7 @@ def crypto_stats(data, crypto_name: str, interval: Tuple[int, int]) -> Tuple[flo
     @return: A tuple that contains the minimum, average, and maximum price values
     """
     # TODO: Implement here your solution
-    
-    return None
+    return (None, None, None)
 
 
 def sort_data(data) -> List[Tuple[str, float]]:
@@ -57,19 +56,21 @@ def sort_data(data) -> List[Tuple[str, float]]:
 
 def get_max_value(data, crypto: str, month: int) -> Tuple[int, float]:
     """
-    This function must return the maximum value for a given crypto in
+    This function must return the maximum price for a given crypto in
     a specific month.
     
     Parameters:
     
-    :data: A data structure containing the values for price or volume
-           of a given crypto.
+    :data: A data structure containing the information about the cryptos.
     :crypto: The crypto for which to search the maximum value.
     :month: The month in which to search for the maximum value.
     
-    Assumption: each month contains 30 days.
+    Assumption: each month contains 30 days. Notice that the month can be
+    a natural number in [1,inf). Example the 13th month represents the first
+    month of the second year of monitoring; the 14th month represents the
+    second month of the second year of monitoring, and so on.
     
-    @return: A tuple containing the day in which the crypto reached the maximum value,
+    @return: A tuple containing the day in which the crypto reached the maximum price,
              along with the maximum value for that crypto
     """
 
@@ -80,19 +81,22 @@ def get_max_value(data, crypto: str, month: int) -> Tuple[int, float]:
 
 def search(data, value: float, crypto: str) -> Tuple[int, float]:
     """
-    This function searches for a specific value in a given data series and
-    returns a tuple with the day and the value for a given cryptocurrency.
+    This function searches for a specific price in a given data series and
+    returns a tuple with the day and the price for a given cryptocurrency.
     If the searched value is not present in the data, the function returns the
-    closest value. It compares two values of the data series, one at position i
-    and the other at position j, and returns the value closest to the searched value.
+    closest price. It compares two values of the data series, one at position i
+    and the other at position j, and returns the price closest to the searched value.
+    
+    N.B.: If you have more than one possible day whose corresponding price is closest
+    to the value in input, return the minimum day.
     
     Parameters:
-    :data: A data structure that contains the values of price and volume of all cryptos.
-    :value: The value to be searched in the data.
+    :data: A data structure that contains the value of price and volume of all cryptos.
+    :value: The price value to be searched in the data.
     :crypto: The crypto name to search the value for.
     
-    @return: A tuple containing the day on which the cryptocurrency reached the closest value
-             and the closest value.
+    @return: A tuple containing the day on which the cryptocurrency reached the closest price
+             and the closest price.
     """
 
     # TODO: Implement here your solution
