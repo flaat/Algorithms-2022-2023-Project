@@ -225,7 +225,7 @@ if __name__ == "__main__":
     crypto_stats_test()
     print('#' * 50)
     print('Testing part 2')
-    get_max_value_in_month_test()
     sorting_test()
+    get_max_value_in_month_test()
     search_test()
     print('#' * 50)
