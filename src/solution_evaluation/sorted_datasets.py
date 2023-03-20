@@ -11,7 +11,7 @@ class SortingEvaluator:
         self.dataset_size = dataset_size
         
         self.BASE_PATH_TO_SOLUTION = join('solutions','sorted_datasets',
-                                          f'{self.dataset_size}', 'test.csv')
+                                          f'{self.dataset_size}', 'results.csv')
         
         
     def eval(self) -> bool:
@@ -40,7 +40,7 @@ class SortingEvaluator:
         return list(map(lambda elem: tuple(elem), values))
 
 
-    def __check_correct_student_solution_format(self) -> bool:      
+    def __check_correct_student_solution_format(self) -> bool:
         if not self.student_data_struct or type(self.student_data_struct) is not list:
             return False
         return all(type(item) is tuple and len(item) == 2 and type(item[0]) is str and type(item[1]) is float 

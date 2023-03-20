@@ -13,6 +13,8 @@ import pandas as pd
 
 import src.group0 as student_solution
 from src.solution_evaluation.crypto_stats import CryptoStatsEvaluator
+from src.solution_evaluation.get_max_value import MaxValueInAMonthEvaluator
+from src.solution_evaluation.search import SearchEvaluator
 from src.solution_evaluation.sorted_datasets import SortingEvaluator
 
 
@@ -39,29 +41,137 @@ def crypto_stats_test():
     
     dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
     #############################################################################
-    # tests for the small dataset
-    filepath = join(DATA_PATH, dataset_file_paths[-1])
-    dataset_size = __get_dataset_size(filepath)
+    for file in dataset_file_paths:
+        filepath = join(DATA_PATH, file)
+        data = student_solution.read_file(filepath)
+        dataset_size = __get_dataset_size(filepath)
+        
+        try:
+            test_file = join(TEST_PATH, 'crypto_stats', dataset_size, 'test.csv')
+            df = pd.read_csv(test_file)
     
-    data = student_solution.read_file(filepath)
+            data = student_solution.read_file(filepath)
 
-    test_file = join(TEST_PATH, 'crypto_stats', dataset_size, 'test.csv')
-    df = pd.read_csv(test_file)
-    
-    for i, value in enumerate(df.values):
-        score, seconds = perform_test(dataset_size=dataset_size,
-                                      test_num=i,
-                                      crypto_stats_args={
-                                          'data': data,
-                                          'crypto_name': value[0],
-                                          'interval': (value[1], value[-1])
-                                      })
-        scores.append(score)
-        average_time.append(seconds)
+            for i, value in enumerate(df.values):
+                score, seconds = perform_test(dataset_size=dataset_size,
+                                            test_num=i,
+                                            crypto_stats_args={
+                                                'data': data,
+                                                'crypto_name': value[0],
+                                                'interval': (value[1], value[-1])
+                                            })
+                scores.append(score)
+                average_time.append(seconds)
+        except:
+            continue
     ###############################################################################
     print(f"crypto_stats ---- Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
     print(f"Score: {sum(scores)}/{len(scores)}")
     ###############################################################################
+    
+def get_max_value_in_month_test():
+    """
+        This functions checks if the get_max_value function works correctly.
+    """
+    def perform_test(dataset_size, test_num, get_max_value_args) -> Tuple[int, float]:
+        tic = time.time()
+        retr = student_solution.get_max_value(**get_max_value_args)
+        toc = time.time()
+        # instantiate the evaluator
+        evaluator = MaxValueInAMonthEvaluator(dataset_size=dataset_size,
+                                        student_data_struct=retr)
+        evaluator.set_test_num(test_num)
+        score = 1 if evaluator.eval() else 0
+        
+        return (score, toc-tic)
+    
+    
+    DATA_PATH, TEST_PATH = "data", "tests"
+    
+    scores, average_time = [], []
+    
+    dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
+    #############################################################################
+    for file in dataset_file_paths:
+        filepath = join(DATA_PATH, file)
+        data = student_solution.read_file(filepath)
+        dataset_size = __get_dataset_size(filepath)
+        
+        try:
+            test_file = join(TEST_PATH, 'get_max_value', dataset_size, 'test.csv')
+            df = pd.read_csv(test_file)
+    
+            data = student_solution.read_file(filepath)
+            
+            for i, value in enumerate(df.values):
+                score, seconds = perform_test(dataset_size=dataset_size,
+                                            test_num=i,
+                                            get_max_value_args={
+                                                'data': data,
+                                                'crypto': value[0],
+                                                'month': value[1]
+                                            })
+                scores.append(score)
+                average_time.append(seconds)
+        except:
+            continue
+    ###############################################################################
+    print(f"get_max_value ---- Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
+    print(f"Score: {sum(scores)}/{len(scores)}")
+    ###############################################################################
+
+
+def search_test():
+    """
+        This functions checks if the search function works correctly.
+    """
+    def perform_test(dataset_size, test_num, search_args) -> Tuple[int, float]:
+        tic = time.time()
+        retr = student_solution.search(**search_args)
+        toc = time.time()
+        # instantiate the evaluator
+        evaluator = SearchEvaluator(dataset_size=dataset_size,
+                                    student_data_struct=retr)
+        evaluator.set_test_num(test_num)
+        score = 1 if evaluator.eval() else 0
+        
+        return (score, toc-tic)
+    
+    
+    DATA_PATH, TEST_PATH = "data", "tests"
+    
+    scores, average_time = [], []
+    
+    dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
+    #############################################################################    
+    for file in dataset_file_paths:
+        filepath = join(DATA_PATH, file)
+        data = student_solution.read_file(filepath)
+        dataset_size = __get_dataset_size(filepath)
+        
+        try:
+            test_file = join(TEST_PATH, 'search', dataset_size, 'test.csv')
+            df = pd.read_csv(test_file)
+            
+            data = student_solution.read_file(filepath)
+    
+            for i, value in enumerate(df.values):                
+                score, seconds = perform_test(dataset_size=dataset_size,
+                                            test_num=i,
+                                            search_args={
+                                                'data': data,
+                                                'value': value[1],
+                                                'crypto': value[0]
+                                            })
+                scores.append(score)
+                average_time.append(seconds)
+        except:
+            continue
+    ###############################################################################
+    print(f"search ---- Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
+    print(f"Score: {sum(scores)}/{len(scores)}")
+    ###############################################################################
+
 
 def reading_data_test():
     """
@@ -110,5 +220,8 @@ def __get_dataset_size(filename):
     return filename[filename.index('_') + 1: filename.index('.')]
             
 if __name__ == "__main__":
-    reading_data_test()
-    crypto_stats_test()
+    #reading_data_test()
+    #crypto_stats_test()
+    #get_max_value_in_month_test()
+    #sorting_test()
+    search_test()
