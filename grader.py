@@ -220,8 +220,12 @@ def __get_dataset_size(filename):
     return filename[filename.index('_') + 1: filename.index('.')]
             
 if __name__ == "__main__":
-    #reading_data_test()
-    #crypto_stats_test()
-    #get_max_value_in_month_test()
-    #sorting_test()
+    print('Testing part 1')
+    reading_data_test()
+    crypto_stats_test()
+    print('#' * 50)
+    print('Testing part 2')
+    get_max_value_in_month_test()
+    sorting_test()
     search_test()
+    print('#' * 50)
