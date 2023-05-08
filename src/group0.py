@@ -75,8 +75,7 @@ def get_max_value(data, crypto: str, month: int) -> Tuple[int, float]:
     """
 
     # TODO: Implement here your solution
-
-    return (None, None)
+    return None, None
 
 
 def search(data, value: float, crypto: str) -> Tuple[int, float]:
@@ -100,9 +99,8 @@ def search(data, value: float, crypto: str) -> Tuple[int, float]:
     """
 
     # TODO: Implement here your solution
-
-
     return (None, None)
+
 
 
 def min_correlation_pathways(data,
@@ -122,16 +120,15 @@ def min_correlation_pathways(data,
                time.
                
     @return: The minimal correlation pathways tree
-    """
+    """    
     # TODO: Implement here your solution
-    
     return None
 
 
 def correlated_cryptos_at_lvl_k(data,
                                 crypto: str,
                                 level: int,
-                                interval: Tuple[int,int]) -> List[str]:
+                                interval: Tuple[int,int]) -> Tuple[Dict[str, List[str]], List[str]]:
     """
     This function retrieves the cryptocurrencies related to the one given in input
     at a particular level of correlation in a designated temporal period [x,y].
@@ -146,5 +143,5 @@ def correlated_cryptos_at_lvl_k(data,
                
     @return: A list of cryptocurrencies
     """
-    # TODO: Implement here your solution
-    return None
+    # TODO: Implement here your solution               
+    return (min_correlation_pathways(data, crypto, interval), None)
