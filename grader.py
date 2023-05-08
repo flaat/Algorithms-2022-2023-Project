@@ -12,11 +12,16 @@ import numpy as np
 import pandas as pd
 
 import src.group0 as student_solution
+from src.solution_evaluation.correlations import KCorrsEvaluator
+from src.solution_evaluation.mst import MSTEvaluator
 from src.solution_evaluation.crypto_stats import CryptoStatsEvaluator
 from src.solution_evaluation.get_max_value import MaxValueInAMonthEvaluator
 from src.solution_evaluation.search import SearchEvaluator
 from src.solution_evaluation.sorted_datasets import SortingEvaluator
 
+
+import warnings
+warnings.filterwarnings("ignore")
 
 def crypto_stats_test():
     """
@@ -53,6 +58,8 @@ def crypto_stats_test():
             data = student_solution.read_file(filepath)
 
             for i, value in enumerate(df.values):
+                print(f'Performing test on crypto={value[0]} in interval=[{value[1]}, {value[-1]}]')                
+
                 score, seconds = perform_test(dataset_size=dataset_size,
                                             test_num=i,
                                             crypto_stats_args={
@@ -104,6 +111,8 @@ def get_max_value_in_month_test():
             data = student_solution.read_file(filepath)
             
             for i, value in enumerate(df.values):
+                print(f'Performing test on crypto={value[0]} for month={value[1]}')                
+
                 score, seconds = perform_test(dataset_size=dataset_size,
                                             test_num=i,
                                             get_max_value_args={
@@ -155,7 +164,8 @@ def search_test():
             
             data = student_solution.read_file(filepath)
     
-            for i, value in enumerate(df.values):                
+            for i, value in enumerate(df.values):
+                print(f'Performing test on crypto={value[0]} for value={value[1]}')                
                 score, seconds = perform_test(dataset_size=dataset_size,
                                             test_num=i,
                                             search_args={
@@ -172,6 +182,113 @@ def search_test():
     print(f"Score: {sum(scores)}/{len(scores)}")
     ###############################################################################
 
+
+def mst_test():
+    """
+        This functions checks if the minimum correlation pathways function works correctly.
+    """
+    def perform_test(dataset_size, test_num, search_args) -> Tuple[int, float]:
+        tic = time.time()
+        retr = student_solution.min_correlation_pathways(**search_args)
+        toc = time.time()
+        # instantiate the evaluator
+        evaluator = MSTEvaluator(dataset_size=dataset_size,
+                                 student_data_struct=retr)
+        evaluator.set_test_num(test_num)
+        score = 1 if evaluator.eval() else 0
+        
+        return (score, toc-tic)
+    
+    
+    DATA_PATH, TEST_PATH = "data", "tests"
+    
+    scores, average_time = [], []
+    
+    dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
+    #############################################################################    
+    for file in dataset_file_paths:
+        filepath = join(DATA_PATH, file)
+        data = student_solution.read_file(filepath)
+        dataset_size = __get_dataset_size(filepath)
+        
+        try:
+            test_file = join(TEST_PATH, 'min_correlation_pathways', dataset_size, 'test.csv')
+            df = pd.read_csv(test_file)
+            
+            data = student_solution.read_file(filepath)
+    
+            for i, value in enumerate(df.values):
+                print(f'Performing test on crypto={value[0]} at interval=[{value[1], value[2]}]')                
+                score, seconds = perform_test(dataset_size=dataset_size,
+                                            test_num=i,
+                                            search_args={
+                                                'data': data,
+                                                'crypto': value[0],
+                                                'interval': [value[1], value[2]]
+                                            })
+                scores.append(score)
+                average_time.append(seconds)
+        except FileNotFoundError:
+            continue
+    ###############################################################################
+    print(f"search ---- Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
+    print(f"Score: {sum(scores)}/{len(scores)}")
+    ###############################################################################
+    
+def correlations_at_lvl_k_test():
+    """
+        This functions checks if the correlation at level k function works correctly.
+    """
+    def perform_test(dataset_size, test_num, search_args) -> Tuple[int, float]:
+        tic = time.time()
+        retr = student_solution.correlated_cryptos_at_lvl_k(**search_args)
+        toc = time.time()
+        # instantiate the evaluator
+        evaluator = KCorrsEvaluator(dataset_size=dataset_size,
+                                    student_data_struct=retr,
+                                    level=search_args['level'],
+                                    source=search_args['crypto'])
+        evaluator.set_test_num(test_num)
+        score = 1 if evaluator.eval() else 0
+        
+        return (score, toc-tic)
+    
+    
+    DATA_PATH, TEST_PATH = "data", "tests"
+    
+    scores, average_time = [], []
+    
+    dataset_file_paths = __get_dataset_filepaths(DATA_PATH)
+    #############################################################################    
+    for file in dataset_file_paths:
+        filepath = join(DATA_PATH, file)
+        data = student_solution.read_file(filepath)
+        dataset_size = __get_dataset_size(filepath)
+        
+        try:
+            test_file = join(TEST_PATH, 'correlated_cryptos_at_lvl_k', dataset_size, 'test.csv')
+            df = pd.read_csv(test_file)
+            
+            data = student_solution.read_file(filepath)
+    
+            for i, value in enumerate(df.values):
+                print(f'Performing test on crypto={value[0]} at interval=[{value[1], value[2]}] at level={value[-1]}')                
+                score, seconds = perform_test(dataset_size=dataset_size,
+                                            test_num=i,
+                                            search_args={
+                                                'data': data,
+                                                'crypto': value[0],
+                                                'interval': [value[1], value[2]],
+                                                'level': value[-1]
+                                            })
+                scores.append(score)
+                average_time.append(seconds)
+        except FileNotFoundError:
+            continue
+    ###############################################################################
+    print(f"search ---- Elapsed time: {np.mean(average_time):.6f} seconds for dataset {dataset_size}")        
+    print(f"Score: {sum(scores)}/{len(scores)}")
+    ###############################################################################
 
 def reading_data_test():
     """
@@ -220,12 +337,16 @@ def __get_dataset_size(filename):
     return filename[filename.index('_') + 1: filename.index('.')]
             
 if __name__ == "__main__":
-    print('Testing part 1')
+    """print('Testing part 1')
     reading_data_test()
     crypto_stats_test()
     print('#' * 50)
     print('Testing part 2')
     sorting_test()
     get_max_value_in_month_test()
-    search_test()
+    search_test()"""
+    print('#' * 50)
+    print('Testing part 3')
+    #mst_test()
+    correlations_at_lvl_k_test()
     print('#' * 50)
