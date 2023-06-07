@@ -337,16 +337,16 @@ def __get_dataset_size(filename):
     return filename[filename.index('_') + 1: filename.index('.')]
             
 if __name__ == "__main__":
-    """print('Testing part 1')
+    print('Testing part 1')
     reading_data_test()
     crypto_stats_test()
     print('#' * 50)
     print('Testing part 2')
     sorting_test()
     get_max_value_in_month_test()
-    search_test()"""
+    search_test()
     print('#' * 50)
     print('Testing part 3')
-    #mst_test()
+    mst_test()
     correlations_at_lvl_k_test()
     print('#' * 50)

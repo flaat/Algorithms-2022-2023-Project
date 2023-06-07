@@ -15,7 +15,7 @@ class KCorrsEvaluator:
         
     def eval(self) -> bool:
         if not self.__check_correct_student_solution_format():
-            print('Test failed.\nThe return type of min_correlation_pathways must be '\
+            print('Test failed.\nThe return type of correlated_cryptos_at_lvl_k must be '\
                 + 'Tuple[Dict[str, List[str]], List[str]]\n'\
                     + 'example: ({"john": ["jack", "michael"], "michael": ["jack"]}, ["john","jack","michael"])')
             print('Did you return both the minimum correlation pathways and the correlated cryptos at level k?')
@@ -29,8 +29,8 @@ class KCorrsEvaluator:
     def __bfs(self):
         graph_dict = self.student_data_struct[0]
         g = nx.DiGraph(graph_dict)
-        visit = nx.single_source_shortest_path_length(g, self.source_crypto)
-        res = [crypto for crypto in visit if visit[crypto] == self.level]
+        visit = nx.single_source_shortest_path_length(g, self.source_crypto.lower())
+        res = [crypto.lower() for crypto in visit if visit[crypto] == self.level]
         return set(res) == set(self.student_data_struct[1])
     
     

@@ -141,7 +141,10 @@ def correlated_cryptos_at_lvl_k(data,
                It's in the form [x,y] where x is the beginning time and y is the end
                time.
                
-    @return: A list of cryptocurrencies
+    @return: A tuple of key-value pairs where:
+        the key is the minimal correlation pathways tree
+        the value is a list of cryptocurrencies correlated at the k-th level
     """
-    # TODO: Implement here your solution               
+    # TODO: Implement here your solution
+    
     return (min_correlation_pathways(data, crypto, interval), None)
